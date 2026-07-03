@@ -41,8 +41,10 @@
 </div>
 
 <script>
-    // الاتصال بالخادم (بدون شرطة مائلة في النهاية)
-    const socket = io("https://weeklygame-production.up.railway.app");
+    // فرض الاتصال المباشر عبر websocket لتجاوز أخطاء 404
+    const socket = io("https://weeklygame-production.up.railway.app", {
+        transports: ["websocket"]
+    });
 
     socket.on("update_admin", (players) => {
         document.getElementById("playerCount").innerText = `المشاركون المتصلون حالياً: ${players.length} / 17`;
