@@ -64,7 +64,9 @@ io.on('connection', (socket) => {
 });
 
 // إعداد المنفذ الخاص بـ Railway
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, '8.0.8.0', () => {
+// تحديد البورت 8080 أو البورت الذي تفرضه المنصة السحابية
+const PORT = process.env.PORT || 8080;
+
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`الخادم يعمل بنجاح على البورت ${PORT}`);
 });
