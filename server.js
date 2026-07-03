@@ -8,7 +8,7 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-// إعداد Socket.IO مع السماح بالاتصال من أي نطاق (مهم لأن الواجهة ستكون على GitHub Pages)
+// إعداد Socket.IO مع السماح بالاتصال من أي نطاق
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -63,7 +63,8 @@ io.on('connection', (socket) => {
   });
 });
 
+// إعداد المنفذ الخاص بـ Railway
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`الخادم يعمل على البورت ${PORT}`);
+server.listen(PORT, '8.0.8.0', () => {
+  console.log(`الخادم يعمل بنجاح على البورت ${PORT}`);
 });
