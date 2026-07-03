@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم اللعبة</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 30px; background-color: #f8f9fa; }
+        .container { background: white; padding: 30px; border-radius: 15px; width: 60%; margin: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+        h2 { color: #333; }
+        .stats { font-size: 18px; color: #666; margin-bottom: 20px; font-weight: bold; }
+        .btn-shuffle { padding: 15px 40px; font-size: 20px; background-color: #007bff; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
+        .btn-shuffle:hover { background-color: #0056b3; }
+        .btn-shuffle:active { transform: scale(0.98); } /* تأثير ضغط الزر السريع */
+        table { width: 100%; border-collapse: collapse; margin-top: 25px; background: #fff; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 16px; }
+        th { background-color: #343a40; color: white; }
+        tr:nth-child(even) { background-color: #fdfdfd; }
+        .num-badge { background: #e1f5fe; color: #0288d1; padding: 4px 12px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>لوحة تحكم المشرف</h2>
+    <div class="stats" id="playerCount">المشاركون المتصلون حالياً: 0 / 17</div>
+    
+    <button class="btn-shuffle" onclick="shuffleAndAssign()">تغيير الأرقام فوراً ⚡</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>اسم المشارك</th>
+                <th>الرقم الحالي</th>
+            </tr>
+        </thead>
+        <tbody id="playersTable">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // استبدل هذا الرابط برابط الخادم الخاص بك من Railway
+    const socket = io("https://your-backend-url.onrender.com");
+
+    socket.on("update_admin", (players) => {
+        document.getElementById("playerCount").innerText = `المشاركون المتصلون حالياً: ${players.length} / 17`;
+        
+        const tableBody = document.getElementById("playersTable");
+        tableBody.innerHTML = ""; 
+        
+        players.forEach(player => {
+            const numberDisplay = player.number ? `<span class="num-badge">${player.number}</span>` : `<span style="color:#999">لم يحدد بعد</span>`;
+            const row = `<tr>
+                            <td><strong>${player.name}</strong></td>
+                            <td>${numberDisplay}</td>
+                         </tr>`;
+            tableBody.innerHTML += row;
+        });
+    });
+
+    function shuffleAndAssign() {
+        socket.emit("shuffle_numbers");
+    }
+</script>
+
+</body>
+</html>
