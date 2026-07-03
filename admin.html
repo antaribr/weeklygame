@@ -12,7 +12,7 @@
         .stats { font-size: 18px; color: #666; margin-bottom: 20px; font-weight: bold; }
         .btn-shuffle { padding: 15px 40px; font-size: 20px; background-color: #007bff; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
         .btn-shuffle:hover { background-color: #0056b3; }
-        .btn-shuffle:active { transform: scale(0.98); } /* تأثير ضغط الزر السريع */
+        .btn-shuffle:active { transform: scale(0.98); }
         table { width: 100%; border-collapse: collapse; margin-top: 25px; background: #fff; }
         th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 16px; }
         th { background-color: #343a40; color: white; }
@@ -41,7 +41,7 @@
 </div>
 
 <script>
-    // استبدل هذا الرابط برابط الخادم الخاص بك من Railway
+    // الاتصال بالخادم (بدون شرطة مائلة في النهاية)
     const socket = io("https://weeklygame-production.up.railway.app");
 
     socket.on("update_admin", (players) => {
