@@ -6,9 +6,14 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
+// مسار للتأكد من أن الخادم يعمل عند فتح الرابط في المتصفح
+app.get('/', (req, res) => {
+    res.send('الخادم يعمل بنجاح ومستعد للعبة! 🚀');
+});
+
 const server = http.createServer(app);
 
-// إعداد Socket.IO مع السماح بالاتصال من أي نطاق
+// إعداد Socket.IO مع السماح بالاتصال من أي مكان
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -21,9 +26,8 @@ let players = []; // مصفوفة لحفظ بيانات اللاعبين
 io.on('connection', (socket) => {
   console.log('مستخدم جديد اتصل:', socket.id);
 
-  // عندما يسجل مستخدم اسمه
+  // تسجيل اللاعب
   socket.on('register', (name) => {
-    // التحقق من عدم تخطي الحد الأقصى (17)
     if (players.length >= 17) {
         socket.emit('error_message', 'عذراً، اكتمل العدد (17 مشارك).');
         return;
@@ -34,7 +38,7 @@ io.on('connection', (socket) => {
     socket.emit('registered_successfully');
   });
 
-  // عندما يضغط الإدمن على زر التوزيع
+  // توزيع الأرقام
   socket.on('shuffle_numbers', () => {
     let numbers = Array.from({ length: 17 }, (_, i) => i + 1);
     
@@ -44,18 +48,15 @@ io.on('connection', (socket) => {
         [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
     }
 
-    // توزيع الأرقام على اللاعبين المسجلين حالياً
     players.forEach((player, index) => {
       player.number = numbers[index];
-      // إرسال الرقم المخصص لكل لاعب
       io.to(player.id).emit('your_number', player.number);
     });
 
-    // إرسال النتيجة النهائية للإدمن
     io.emit('update_admin', players);
   });
 
-  // عند خروج لاعب
+  // مغادرة اللاعب
   socket.on('disconnect', () => {
     players = players.filter(p => p.id !== socket.id);
     io.emit('update_admin', players);
@@ -63,10 +64,8 @@ io.on('connection', (socket) => {
   });
 });
 
-// إعداد المنفذ الخاص بـ Railway
-// تحديد البورت 8080 أو البورت الذي تفرضه المنصة السحابية
+// استخدام البورت 8080 بناءً على متطلبات المنصة
 const PORT = process.env.PORT || 8080;
-
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`الخادم يعمل بنجاح على البورت ${PORT}`);
 });
