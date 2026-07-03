@@ -15,7 +15,6 @@
         button:hover { background-color: #218838; }
         #result { margin-top: 25px; font-size: 32px; font-weight: bold; color: #dc3545; padding: 10px; border-radius: 8px; }
         
-        /* تأثير وميض سريع عند تغير الرقم ليوحي بالسرعة */
         .updated { animation: flashEffect 0.3s ease-out; }
         @keyframes flashEffect {
             0% { background-color: #ffeeba; transform: scale(1.1); }
@@ -38,8 +37,10 @@
 </div>
 
 <script>
-    // الاتصال بالخادم (بدون شرطة مائلة في النهاية)
-    const socket = io("https://weeklygame-production.up.railway.app");
+    // فرض الاتصال المباشر عبر websocket لتجاوز أخطاء 404
+    const socket = io("https://weeklygame-production.up.railway.app", {
+        transports: ["websocket"]
+    });
 
     function register() {
         const name = document.getElementById("playerName").value;
@@ -57,12 +58,10 @@
         document.getElementById("waitingBox").style.display = "block";
     });
 
-    // تحديث الرقم فوراً عند استلامه من الخادم
     socket.on("your_number", (number) => {
         const resultDiv = document.getElementById("result");
         resultDiv.innerText = "رقمك: " + number;
         
-        // تفعيل تأثير السرعة البصرية
         resultDiv.classList.remove("updated");
         void resultDiv.offsetWidth; 
         resultDiv.classList.add("updated");
