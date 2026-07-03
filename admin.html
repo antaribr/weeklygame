@@ -42,7 +42,7 @@
 
 <script>
     // استبدل هذا الرابط برابط الخادم الخاص بك من Railway
-    const socket = io("https://your-backend-url.onrender.com");
+    const socket = io("https://weeklygame-production.up.railway.app");
 
     socket.on("update_admin", (players) => {
         document.getElementById("playerCount").innerText = `المشاركون المتصلون حالياً: ${players.length} / 17`;
