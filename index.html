@@ -38,7 +38,7 @@
 </div>
 
 <script>
-    // استبدل هذا الرابط برابط الخادم الخاص بك من Railway
+    // الاتصال بالخادم (بدون شرطة مائلة في النهاية)
     const socket = io("https://weeklygame-production.up.railway.app");
 
     function register() {
@@ -57,14 +57,14 @@
         document.getElementById("waitingBox").style.display = "block";
     });
 
-    // هنا يحدث السحر الفوري، بمجرد وصول الرقم يتغير فوراً مع تأثير الوميض
+    // تحديث الرقم فوراً عند استلامه من الخادم
     socket.on("your_number", (number) => {
         const resultDiv = document.getElementById("result");
         resultDiv.innerText = "رقمك: " + number;
         
         // تفعيل تأثير السرعة البصرية
         resultDiv.classList.remove("updated");
-        void resultDiv.offsetWidth; // إعادة تهيئة الـ DOM لتكرار التأثير
+        void resultDiv.offsetWidth; 
         resultDiv.classList.add("updated");
     });
 
